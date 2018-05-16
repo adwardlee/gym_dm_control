@@ -1,31 +1,33 @@
-# dm_control2gym
+# gym_dm_control
 
-dm_control2gym is a small wrapper to make [DeepMind Control Suite](https://github.com/deepmind/dm_control) environments available for [OpenAI Gym](https://github.com/openai/gym).
+gym_dm_control is a small wrapper to make [DeepMind Control Suite](https://github.com/deepmind/dm_control) environments available for [OpenAI Gym](https://github.com/openai/gym).
+
+modify the code from https://github.com/martinseilair/dm_control2gym
 
 ## Installation
 
 ```shell
-$ git clone https://github.com/martinseilair/dm_control2gym/
-$ cd dm_control2gym
+$ git clone https://github.com/adwardlee/gym_dm_control/
+$ cd gym_dm_control
 $ pip install .
 ```
 
-Tested with Python 3.5.2 and Ubuntu 16.04.
+Tested with Python 3.6.4 and Ubuntu 17.04.
 
 ## Quick start
 
 ```python
 import gym
-import dm_control2gym
+import gym_dm_control
 
 # make the dm_control environment
-env = dm_control2gym.make(domain_name="cartpole", task_name="balance")
+env = gym_dm_control.make(domain_name="cartpole", task_name="balance")
 
 # use same syntax as in gym
 env.reset()
 for t in range(1000):
     observation, reward, done, info = env.step(env.action_space.sample()) # take a random action
-    env.render()
+    env.render(mode='human')
 
 ```
 
@@ -42,45 +44,5 @@ The difference between the `Discrete` and the corresponding `ArraySpec` with typ
 Three rendering modes are available by default:
 
 * `human`: Render scene and show it
-* `rgb_array`: Render scene and return it as rgb array
-* `human_rgb_array`: Render scene, show and return it
+* `return`: only return it as rgb array
 
-You can create your own rendering modes before making the environment by:
-
-```python
-dm_control2gym.create_render_mode(name, show=True, return_pixel=False, height=240, width=320, camera_id=-1, overlays=(),
-             depth=False, scene_option=None)
-```
-
-* `name`: name of rendering mode
-* `show`: rendered image is shown
-* `return_pixel`: return the rendered image
-
-It is possible to render in different render modes subsequently. Output of several render modes can be visualized at the same time.
-
-
-
-
-### Procedurally generated environments
-
-* `swimmer`: `swimmer_n`
-    - `k`: number of links
-* `stacker`: `stack_k`
-    - `k`: number of boxes (max. 4)
-* `lqr`: `lqr_n_m`
-    - `n`: number of masses
-    - `m`: number of actuated masses
-* `cartpole`: `k_poles`
-    - `k`: number of poles
-    - `swing_up`: balance or swing_up task (default=TRUE)
-    - `sparse`: use sparse reward variant (default=FALSE)
-    
-__Example__
-
-```python
-env = dm_control2gym.make(domain_name="cartpole", task_name="k_poles",task_kwargs={'k':10})
-```
-
-## What's new
-
-2018-01-25: Optimized registering process (thanks to [rejuvyesh](https://github.com/rejuvyesh)), added access to procedurally generated environments, added render mode functionality
